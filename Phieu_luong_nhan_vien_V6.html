@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phiếu Lương Nhân Viên v6 - Tự tính ngày công</title>
+<style>
+*{box-sizing:border-box}body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f0f2f5;margin:0;padding:20px;color:#333}.container{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.05fr .95fr;gap:20px}@media(max-width:800px){.container{grid-template-columns:1fr}}.box{background:#fff;padding:22px;border-radius:14px;box-shadow:0 4px 15px rgba(0,0,0,.08)}h2,h3{color:#1a73e8;margin-top:0;border-bottom:2px solid #f0f2f5;padding-bottom:10px}.section-title{font-weight:700;color:#333;margin-top:16px;margin-bottom:9px;font-size:14px;border-left:3px solid #1a73e8;padding:6px 8px;background:#f8f9fa}.form-group{margin-bottom:11px}label{display:block;font-weight:600;margin-bottom:5px;font-size:13px;color:#555}input{width:100%;padding:9px 10px;border:1px solid #dcdcdc;border-radius:7px;font-size:15px}input:focus{border-color:#1a73e8;outline:none;box-shadow:0 0 0 2px rgba(26,115,232,.08)}.hint{font-size:11px;color:#777;margin-top:4px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:7px 8px;border-bottom:1px solid #e3e3e3}td.val{text-align:right;font-weight:600;white-space:nowrap}.group{background:#f8f9fa;font-weight:700;color:#333}.ot-row{background:#e8f0fe;font-weight:700;color:#174ea6}.insurance-total{background:#fff3cd;font-weight:800;color:#8a5a00}.total{font-size:16px;font-weight:800;color:#c62828;border-top:2px solid #333}.net{font-size:18px;font-weight:900;color:#0b7a3b;background:#eef8f1}.muted{color:#777;font-size:11px}button{width:100%;margin-top:16px;background:#1a73e8;color:#fff;border:0;padding:12px;border-radius:7px;font-size:16px;font-weight:700;cursor:pointer}button:hover{background:#1557b0}.notice{margin:8px 0 0;padding:8px 10px;background:#f7faff;border:1px solid #dce9ff;border-radius:7px;font-size:11px;color:#555}@media print{ @page{size:A4;margin:12mm} body{background:#fff;padding:0;color:#111;font-size:11px}.container{display:block;max-width:none}.input-panel{display:none!important}.payslip-panel{display:block!important;width:100%;padding:0!important;box-shadow:none!important;border:0!important;background:#fff!important}.payslip-panel h3{color:#111;text-align:center;font-size:20px;border-bottom:2px solid #222;padding-bottom:10px}.payslip-panel table{font-size:11px}.payslip-panel th,.payslip-panel td{padding:5px 7px}.payslip-panel .notice,.hint,.screen-only,button{display:none!important}.signature-row{display:flex!important;justify-content:space-between;gap:20px;margin-top:32px;text-align:center}.signature{width:45%;min-height:75px}.meta-grid{border:1px solid #bbb;padding:9px;margin-bottom:12px}.meta-grid span{color:#111}.net{background:#eef8f1!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+.signature-row{display:none}.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px 18px;background:#f8fbff;border:1px solid #dbe7f5;border-radius:8px;padding:12px;margin:0 0 12px;font-size:13px}.meta-grid strong{color:#444}.meta-grid span{font-weight:700}.small-summary{font-size:12px;color:#555;margin:0 0 10px}.input-panel{} .payslip-panel{}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="box input-panel">
+<h3>Thông Tin Chấm Công & Trợ Cấp Nhân Viên</h3>
+<div class="section-title">1. Thông tin cơ bản & Giờ công</div>
+<div class="form-group"><label>Tháng tính lương:</label><input type="month" id="payMonth"><div class="hint">Dùng để tham khảo kỳ tính lương.</div></div>
+<div class="form-group"><label>Số ngày công chuẩn trong tháng:</label><input type="number" id="workingDays" value="26" min="1" step="1"><div class="hint">Giờ chuẩn tháng = ngày công chuẩn × 8 giờ.</div></div>
+<div class="form-group"><label>Lương cơ bản (VNĐ):</label><input type="text" id="baseSalary" value="5.700.000" inputmode="numeric" autocomplete="off"></div>
+<div class="form-group"><label>Số giờ công ca ngày thực tế:</label><input type="number" id="actualDayHours" value="0" step="0.5" min="0"></div>
+<div class="form-group"><label>Số giờ công ca đêm thực tế:</label><input type="number" id="actualNightHours" value="0" step="0.5" min="0"></div>
+<div class="form-group"><label>Số giờ nghỉ có lương:</label><input type="number" id="paidLeaveHours" value="0" step="0.5" min="0"></div>
+
+<div class="section-title">2. Các khoản phụ cấp & thu nhập</div>
+<div class="form-group"><label>Thâm niên:</label><input type="text" id="seniority" value="0" inputmode="numeric" autocomplete="off"></div>
+<div class="form-group"><label>Xăng xe:</label><input type="text" id="gas" value="300.000" inputmode="numeric" autocomplete="off"></div>
+<div class="form-group"><label>Nhà ở:</label><input type="text" id="housing" value="600.000" inputmode="numeric" autocomplete="off"></div>
+<div class="form-group"><label>Chuyên cần tiêu chuẩn:</label><input type="text" id="attendanceStandard" value="500.000" inputmode="numeric" autocomplete="off"></div>
+<div class="form-group"><label>Trợ cấp công đoạn đặc thù:</label><input type="text" id="specialAllowance" value="0" inputmode="numeric" autocomplete="off"></div>
+<div class="form-group"><label>Trợ cấp chức vụ:</label><input type="text" id="positionAllowance" value="0" inputmode="numeric" autocomplete="off"></div>
+<div class="form-group"><label>Trợ cấp trách nhiệm/cương vị:</label><input type="text" id="responsibilityAllowance" value="0" inputmode="numeric" autocomplete="off"></div>
+<div class="form-group"><label>Trợ cấp sinh lý:</label><input type="text" id="physiologicalAllowance" value="0" inputmode="numeric" autocomplete="off"></div>
+<div class="form-group"><label>Trợ cấp nặng nhọc, độc hại:</label><input type="text" id="hazardAllowance" value="0" inputmode="numeric" autocomplete="off"></div>
+<div class="form-group"><label><input type="checkbox" id="hazardTaxExempt" style="width:auto;margin-right:6px">Khoản độc hại đủ điều kiện miễn TNCN theo quy định</label><div class="hint">Chỉ tích khi HR/kế toán xác nhận khoản trợ cấp đáp ứng điều kiện pháp luật.</div></div>
+<div class="form-group"><label>Trợ cấp môi trường:</label><input type="text" id="environmentAllowance" value="0" inputmode="numeric" autocomplete="off"></div>
+
+<div class="section-title">3. Giờ tăng ca & Ca đêm</div>
+<div class="form-group"><label>Số giờ trợ cấp đêm (30%):</label><input type="number" id="subNight" value="0" step="0.5" min="0"></div>
+<div class="form-group"><label>Số giờ tăng ca ngày thường (150%):</label><input type="number" id="otDay" value="0" step="0.5" min="0"></div>
+<div class="form-group"><label>Số giờ tăng ca đêm ngày thường (200%):</label><input type="number" id="otNight" value="0" step="0.5" min="0"></div>
+<div class="form-group"><label>Số giờ tăng ca ngày Chủ Nhật (200%):</label><input type="number" id="otSunDay" value="0" step="0.5" min="0"></div>
+<div class="form-group"><label>Số giờ tăng ca đêm Chủ Nhật (270%):</label><input type="number" id="otSunNight" value="0" step="0.5" min="0"></div>
+<div class="form-group"><label>Số giờ tăng ca ngày Lễ (300%):</label><input type="number" id="otHolidayDay" value="0" step="0.5" min="0"></div>
+<div class="form-group"><label>Số giờ tăng ca đêm Lễ (390%):</label><input type="number" id="otHolidayNight" value="0" step="0.5" min="0"></div>
+
+<div class="section-title">4. Giảm trừ</div>
+<div class="form-group"><label>Số người phụ thuộc:</label><input type="number" id="dependents" value="0" min="0" step="1"></div>
+<div class="form-group"><label>Khoản khấu trừ khác:</label><input type="text" id="otherDeduction" value="0" inputmode="numeric" autocomplete="off"></div>
+</div>
+
+<div class="box payslip-panel" style="background:#fffcf0">
+<h3>PHIẾU LƯƠNG NHÂN VIÊN</h3>
+<div class="meta-grid">
+<div><strong>Kỳ lương:</strong> <span id="outPayMonth">—</span></div>
+</div>
+<p class="small-summary" id="workSummary">Giờ công chuẩn: 0 giờ · Giờ hưởng lương: 0 giờ · Giờ thiếu: 0 giờ</p>
+<table>
+<tr class="group"><td colspan="2">A. TỔNG HỢP CÔNG</td></tr>
+<tr><td>Giờ công chuẩn trong tháng</td><td class="val" id="lblStandardHours">0</td></tr>
+<tr><td>Giờ hưởng lương (gồm nghỉ có lương)</td><td class="val" id="lblPaidHours">0</td></tr>
+<tr><td>Giờ thiếu công</td><td class="val" id="lblMissingHours">0</td></tr>
+<tr><td>Tổng giờ tăng ca đã nhập</td><td class="val" id="lblTotalOtHours">0</td></tr>
+<tr class="group"><td colspan="2">B. THU NHẬP</td></tr>
+<tr><td>Lương cơ bản (thực tế)</td><td class="val" id="lblBase">0</td></tr>
+<tr><td>Thâm niên (thực tế)</td><td class="val" id="lblSeniority">0</td></tr>
+<tr><td>Xăng xe (thực tế)</td><td class="val" id="lblGas">0</td></tr>
+<tr><td>Nhà ở (thực tế)</td><td class="val" id="lblHousing">0</td></tr>
+<tr><td>Chuyên cần</td><td class="val" id="lblAttendance">0</td></tr>
+<tr><td>Trợ cấp công đoạn (thực tế)</td><td class="val" id="lblSpecial">0</td></tr>
+<tr><td>Trợ cấp chức vụ (thực tế)</td><td class="val" id="lblPosition">0</td></tr>
+<tr><td>Trợ cấp trách nhiệm/cương vị (thực tế)</td><td class="val" id="lblResponsibility">0</td></tr>
+<tr><td>Trợ cấp sinh lý (thực tế)</td><td class="val" id="lblPhysiological">0</td></tr>
+<tr><td>Trợ cấp nặng nhọc, độc hại (thực tế)</td><td class="val" id="lblHazard">0</td></tr>
+<tr><td>Trợ cấp môi trường (thực tế)</td><td class="val" id="lblEnvironment">0</td></tr>
+<tr class="ot-row"><td>Căn cứ tính tăng ca</td><td class="val" id="lblOtBase">0</td></tr>
+<tr><td>Trợ cấp ca đêm (30%)</td><td class="val" id="lblSubNight">0</td></tr>
+<tr><td>Tăng ca ngày thường (150%)</td><td class="val" id="lblOtDay">0</td></tr>
+<tr><td>Tăng ca đêm ngày thường (200%)</td><td class="val" id="lblOtNight">0</td></tr>
+<tr><td>Tăng ca ngày Chủ Nhật (200%)</td><td class="val" id="lblOtSunDay">0</td></tr>
+<tr><td>Tăng ca đêm Chủ Nhật (270%)</td><td class="val" id="lblOtSunNight">0</td></tr>
+<tr><td>Tăng ca ngày Lễ (300%)</td><td class="val" id="lblOtHolidayDay">0</td></tr>
+<tr><td>Tăng ca đêm Lễ (390%)</td><td class="val" id="lblOtHolidayNight">0</td></tr>
+<tr class="total"><td>Tổng thu nhập</td><td class="val" id="lblGross">0</td></tr>
+
+<tr class="group"><td colspan="2">C. BẢO HIỂM & CÔNG ĐOÀN</td></tr>
+<tr><td>BHXH (8%)</td><td class="val" id="lblBHXH">0</td></tr>
+<tr><td>BHYT (1,5%)</td><td class="val" id="lblBHYT">0</td></tr>
+<tr><td>BHTN (1%)</td><td class="val" id="lblBHTN">0</td></tr>
+<tr class="insurance-total"><td><strong>Tổng tiền bảo hiểm bị trừ</strong></td><td class="val" id="lblInsuranceTotal">0</td></tr>
+<tr><td>Công đoàn</td><td class="val" id="lblUnion">0</td></tr>
+
+<tr class="group"><td colspan="2">D. THUẾ TNCN DỰ KIẾN 2026</td></tr>
+<tr><td>Tổng thu nhập miễn TNCN (OT/đêm + khoản độc hại đủ điều kiện)</td><td class="val" id="lblTaxExempt">0</td></tr>
+<tr><td>Thu nhập tính thuế sau giảm trừ</td><td class="val" id="lblTaxable">0</td></tr>
+<tr><td>Thuế TNCN</td><td class="val" id="lblPit">0</td></tr>
+
+<tr class="group"><td colspan="2">E. THỰC LĨNH</td></tr>
+<tr><td>Khấu trừ khác</td><td class="val" id="lblOther">0</td></tr>
+<tr class="net"><td>THỰC LĨNH</td><td class="val" id="lblNet">0</td></tr>
+</table>
+<div class="notice">Phiếu lương mô phỏng để nhân viên tham khảo, không thay thế bảng lương đã được HR/kế toán xác nhận. Các khoản thuế và bảo hiểm cần được đối chiếu với chính sách thực tế của công ty.</div>
+<div class="signature-row"><div class="signature"><strong>NGƯỜI LAO ĐỘNG</strong><br><br><br>(Ký và ghi rõ họ tên)</div><div class="signature"><strong>ĐẠI DIỆN CÔNG TY</strong><br><br><br>(Ký và xác nhận)</div></div>
+<button class="screen-only" onclick="window.print()">In / Lưu Phiếu Lương (PDF)</button>
+</div>
+</div>
+
+<script>
+function num(id){
+ const el=document.getElementById(id); if(!el) return 0;
+ const raw=String(el.value ?? '').replace(/\D/g,'');
+ return raw ? Number(raw) : 0;
+}
+function nval(id){ return parseFloat(document.getElementById(id)?.value)||0; }
+function money(v){ return Math.round(Number(v)||0).toLocaleString('vi-VN'); }
+function formatMoneyInput(el){ const v=num(el.id); el.value=v?money(v):'0'; }
+function set(id,v){ const el=document.getElementById(id); if(el) el.innerText=money(v); }
+function progressivePIT(taxable){
+ let t=Math.max(0,taxable), tax=0;
+ const brackets=[[10000000,.05],[20000000,.10],[30000000,.20],[40000000,.30],[Infinity,.35]];
+ let prev=0;
+ for(const [upper,rate] of brackets){ if(t<=prev) break; const part=Math.min(t,upper)-prev; tax+=part*rate; prev=upper; }
+ return tax;
+}
+function tinhToan(){
+ const workingDays=Math.max(1,nval('workingDays'));
+ const monthlyStandardHours=workingDays*8;
+ const otStandardHours=Math.min(monthlyStandardHours,208);
+ const baseSalary=num('baseSalary');
+ const seniority=num('seniority');
+ const dayHours=Math.max(0,nval('actualDayHours'));
+ const nightHours=Math.max(0,nval('actualNightHours'));
+ const paidLeave=Math.max(0,nval('paidLeaveHours'));
+ const gas=num('gas'), housing=num('housing'), attendanceStd=num('attendanceStandard');
+ const special=num('specialAllowance'), position=num('positionAllowance'), responsibility=num('responsibilityAllowance');
+ const physiological=num('physiologicalAllowance'), hazard=num('hazardAllowance'), environment=num('environmentAllowance');
+ const paidHours=Math.min(dayHours+nightHours+paidLeave,monthlyStandardHours);
+ const ratio=monthlyStandardHours>0?paidHours/monthlyStandardHours:0;
+ const missingHours=Math.max(0,monthlyStandardHours-paidHours);
+ let attendanceVal=attendanceStd;
+ if(missingHours<=0) attendanceVal=attendanceStd;
+ else if(missingHours<=4) attendanceVal=400000;
+ else if(missingHours<=8) attendanceVal=300000;
+ else attendanceVal=0;
+ const baseActual=baseSalary*ratio, seniorityActual=seniority*ratio, gasActual=gas*ratio, housingActual=housing*ratio;
+ const specialActual=special*ratio, positionActual=position*ratio, responsibilityActual=responsibility*ratio;
+ const physiologicalActual=physiological*ratio, hazardActual=hazard*ratio, environmentActual=environment*ratio;
+ const otBaseTotal=baseSalary+seniority+special+position+responsibility+hazard+environment;
+ const subNight=nval('subNight'), otDay=nval('otDay'), otNight=nval('otNight'), otSunDay=nval('otSunDay'), otSunNight=nval('otSunNight'), otHolidayDay=nval('otHolidayDay'), otHolidayNight=nval('otHolidayNight');
+ const totalOtHours=otDay+otNight+otSunDay+otSunNight+otHolidayDay+otHolidayNight;
+ const hourlyOt=otStandardHours>0?otBaseTotal/otStandardHours:0;
+ const tienSubNight=hourlyOt*subNight*.30, tienOtDay=hourlyOt*otDay*1.5, tienOtNight=hourlyOt*otNight*2, tienOtSunDay=hourlyOt*otSunDay*2, tienOtSunNight=hourlyOt*otSunNight*2.7, tienOtHolidayDay=hourlyOt*otHolidayDay*3, tienOtHolidayNight=hourlyOt*otHolidayNight*3.9;
+ const gross=baseActual+seniorityActual+gasActual+housingActual+attendanceVal+specialActual+positionActual+responsibilityActual+physiologicalActual+hazardActual+environmentActual+tienSubNight+tienOtDay+tienOtNight+tienOtSunDay+tienOtSunNight+tienOtHolidayDay+tienOtHolidayNight;
+ const eligible=(paidHours/8)>12;
+ const bhxh=eligible?otBaseTotal*.08:0, bhyt=eligible?otBaseTotal*.015:0, bhtn=eligible?otBaseTotal*.01:0;
+ const insuranceTotal=bhxh+bhyt+bhtn, union=eligible?27500:0;
+ const dependents=Math.max(0,nval('dependents'));
+ const hazardTaxExempt=document.getElementById('hazardTaxExempt')?.checked===true;
+ const taxExemptIncome=tienSubNight+tienOtDay+tienOtNight+tienOtSunDay+tienOtSunNight+tienOtHolidayDay+tienOtHolidayNight+(hazardTaxExempt?hazardActual:0);
+ const taxable=Math.max(0,gross-taxExemptIncome-insuranceTotal-15500000-dependents*6200000);
+ const pit=progressivePIT(taxable);
+ const other=num('otherDeduction');
+ const net=gross-insuranceTotal-union-pit-other;
+ set('lblStandardHours',monthlyStandardHours); set('lblPaidHours',paidHours); set('lblMissingHours',missingHours); set('lblTotalOtHours',totalOtHours);
+ set('lblBase',baseActual); set('lblSeniority',seniorityActual); set('lblGas',gasActual); set('lblHousing',housingActual); set('lblAttendance',attendanceVal); set('lblSpecial',specialActual); set('lblPosition',positionActual); set('lblResponsibility',responsibilityActual); set('lblPhysiological',physiologicalActual); set('lblHazard',hazardActual); set('lblEnvironment',environmentActual); set('lblOtBase',otBaseTotal); set('lblSubNight',tienSubNight); set('lblOtDay',tienOtDay); set('lblOtNight',tienOtNight); set('lblOtSunDay',tienOtSunDay); set('lblOtSunNight',tienOtSunNight); set('lblOtHolidayDay',tienOtHolidayDay); set('lblOtHolidayNight',tienOtHolidayNight); set('lblGross',gross); set('lblBHXH',bhxh); set('lblBHYT',bhyt); set('lblBHTN',bhtn); set('lblInsuranceTotal',insuranceTotal); set('lblUnion',union); set('lblTaxExempt',taxExemptIncome); set('lblTaxable',taxable); set('lblPit',pit); set('lblOther',other); set('lblNet',net);
+ const pm=document.getElementById('payMonth')?.value||'';
+ document.getElementById('outPayMonth').textContent=pm?pm.slice(5,7)+'/'+pm.slice(0,4):'Chưa chọn';
+ document.getElementById('workSummary').textContent=`Giờ công chuẩn: ${money(monthlyStandardHours)} giờ · Giờ hưởng lương: ${money(paidHours)} giờ · Giờ thiếu: ${money(missingHours)} giờ`;
+}
+document.getElementById('hazardTaxExempt')?.addEventListener('change',tinhToan);
+const moneyIds=['baseSalary','seniority','gas','housing','attendanceStandard','specialAllowance','positionAllowance','responsibilityAllowance','physiologicalAllowance','hazardAllowance','environmentAllowance','otherDeduction'];
+moneyIds.forEach(id=>{const el=document.getElementById(id); el.addEventListener('input',tinhToan); el.addEventListener('change',()=>{formatMoneyInput(el);tinhToan()}); el.addEventListener('blur',()=>{formatMoneyInput(el);tinhToan()});});
+const numberIds=['workingDays','actualDayHours','actualNightHours','paidLeaveHours','subNight','otDay','otNight','otSunDay','otSunNight','otHolidayDay','otHolidayNight','dependents'];
+numberIds.forEach(id=>{const el=document.getElementById(id); if(el){el.addEventListener('input',tinhToan);el.addEventListener('change',tinhToan);}});
+// Đếm ngày công chuẩn: từ thứ Hai đến thứ Bảy, không trừ ngày lễ/Tết.
+// Tự cập nhật khi đổi tháng; ô ngày công vẫn cho phép người dùng sửa thủ công.
+function demNgayCongChuan(thangNam){
+ if(!thangNam || !/^\d{4}-\d{2}$/.test(thangNam)) return null;
+ const [year, month] = thangNam.split('-').map(Number);
+ const daysInMonth = new Date(year, month, 0).getDate();
+ let count = 0;
+ for(let day=1; day<=daysInMonth; day++){
+  const weekday = new Date(year, month-1, day).getDay();
+  if(weekday !== 0) count++; // loại Chủ nhật, giữ ngày lễ/Tết
+ }
+ return count;
+}
+function capNhatNgayCongTheoThang(){
+ const selectedMonth = document.getElementById('payMonth').value;
+ const days = demNgayCongChuan(selectedMonth);
+ if(days !== null) document.getElementById('workingDays').value = days;
+ tinhToan();
+}
+const now = new Date();
+const month = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+document.getElementById('payMonth').value=month;
+document.getElementById('payMonth').addEventListener('change',capNhatNgayCongTheoThang);
+// Lần mở đầu: tự lấy ngày công của tháng hiện tại. Sau đó người dùng có thể sửa tự do.
+const initialDays = demNgayCongChuan(month);
+if(initialDays !== null) document.getElementById('workingDays').value = initialDays;
+window.addEventListener('DOMContentLoaded',()=>{moneyIds.forEach(id=>{const el=document.getElementById(id);if(el)formatMoneyInput(el)});tinhToan()});
+</script>
+</body>
+</html>
