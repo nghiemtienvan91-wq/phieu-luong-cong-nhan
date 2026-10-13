@@ -221,7 +221,6 @@
 
         <div class="section-title">C. Thuế TNCN dự kiến 2026</div>
         <table>
-            <tr><td>Thu nhập miễn TNCN (phụ cấp đêm 30% + tiền OT + phụ cấp độc hại đủ điều kiện)</td><td class="val" id="lblTaxExemptIncome">0</td></tr>
             <tr><td>Giảm trừ bản thân</td><td class="val" id="lblPersonalDeduction">15.500.000</td></tr>
             <tr><td>Giảm trừ người phụ thuộc</td><td class="val" id="lblDependentDeduction">0</td></tr>
             <tr><td>Thu nhập tính thuế</td><td class="val" id="lblTaxable">0</td></tr>
@@ -447,7 +446,6 @@ function tinhToan() {
 
     document.getElementById('lblPersonalDeduction').innerText = money(personalDeduction);
     document.getElementById('lblDependentDeduction').innerText = money(dependentDeduction);
-    document.getElementById('lblTaxExemptIncome').innerText = money(totalTaxExemptIncome);
     document.getElementById('lblTaxable').innerText = money(taxable);
     document.getElementById('lblPit').innerText = money(pit);
     document.getElementById('lblOther').innerText = money(other);
